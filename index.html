@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mapa Interactivo v11</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+    <div id="edit-panel">
+        <button id="lock-btn" class="btn-lock" onclick="toggleLock()">🔓</button>
+        
+        <div class="edit-control" id="ctrl-size">
+            <label>Tamaño</label>
+            <input type="range" id="size-slider" min="30" max="250" value="80">
+        </div>
+
+        <div class="edit-control" id="ctrl-rotate">
+            <label>Giro</label>
+            <input type="range" id="rotate-slider" min="0" max="360" value="0">
+        </div>
+
+        <button class="btn-delete-small" onclick="deleteCurrentSticker()">🗑</button>
+        <button class="btn-close-edit" onclick="deselectSticker()">OK</button>
+    </div>
+
+    <div id="main-view">
+        <div id="map-container">
+            <img src="imagenes/mapa.png" id="background-map" alt="Mapa">
+        </div>
+    </div>
+
+    <div class="bottom-sheet">
+        <div class="sticker-selector" id="sticker-menu">
+            <div class="x-btn" onclick="addCross()">✕</div>
+            </div>
+
+        <div class="btn-group">
+            <button class="btn-export" onclick="exportMap()">EXPORTAR JPG</button>
+            <button class="btn-json" onclick="downloadJSON()" title="Guardar Datos">📦</button>
+            <button class="btn-json btn-load" onclick="document.getElementById('file-input').click()" title="Cargar Datos">📂</button>
+            <input type="file" id="file-input" style="display:none" onchange="importJSON(event)">
+            <button class="btn-clear" onclick="clearMap()">BORRAR</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

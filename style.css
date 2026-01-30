@@ -1,0 +1,47 @@
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #000; font-family: sans-serif; }
+
+#main-view { width: 100%; height: calc(100% - 210px); position: relative; overflow: hidden; touch-action: none; }
+#map-container { position: absolute; top: 0; left: 0; transform-origin: 0 0; will-change: transform; }
+#background-map { display: block; width: 1000px; height: auto; pointer-events: none; }
+
+/* Pegatinas */
+.sticker-placed { position: absolute; transform: translate(-50%, -50%) rotate(var(--rot)); z-index: 10; touch-action: none; }
+.sticker-placed.active { outline: 3px solid #3498db; filter: drop-shadow(0 0 10px #3498db); z-index: 100; }
+.sticker-placed.locked { filter: sepia(0.4) contrast(1.1); pointer-events: auto; }
+
+/* Panel Superior */
+#edit-panel {
+    position: fixed; top: 0; left: 0; width: 100%; background: rgba(15, 15, 15, 0.95);
+    padding: 10px 15px; border-bottom: 1px solid #333; z-index: 2500; display: none;
+    backdrop-filter: blur(10px); align-items: center; gap: 15px;
+}
+#edit-panel.visible { display: flex; }
+.edit-control { flex: 1; display: flex; flex-direction: column; }
+.edit-control label { font-size: 10px; color: #888; text-transform: uppercase; }
+input[type="range"] { accent-color: #3498db; }
+
+/* Botones */
+.btn-lock { background: #333; border: none; border-radius: 8px; width: 45px; height: 45px; font-size: 20px; color: white; }
+.btn-lock.is-locked { background: #f1c40f; color: #000; }
+.btn-delete-small { background: #c0392b; color: white; border: none; width: 45px; height: 45px; border-radius: 8px; }
+.btn-close-edit { background: #444; color: white; border: none; padding: 0 15px; height: 45px; border-radius: 8px; font-weight: bold; }
+
+/* Barra Inferior */
+.bottom-sheet { position: fixed; bottom: 0; width: 100%; height: 210px; background: #111; border-top: 2px solid #333; z-index: 1500; display: flex; flex-direction: column; }
+.sticker-selector { flex: 1; display: flex; gap: 20px; overflow-x: auto; padding: 15px 20px 30px 20px; }
+.sticker-source, .x-btn { flex: 0 0 95px; width: 95px; height: 95px; background: #222; border-radius: 15px; object-fit: contain; padding: 8px; }
+.x-btn { background: #c0392b; color: white; font-size: 40px; display: flex; align-items: center; justify-content: center; border: 3px solid #e74c3c; }
+
+.btn-group { display: flex; gap: 10px; padding: 0 15px 15px 15px; }
+.btn-export { background: #27ae60; color: white; flex: 2; border: none; border-radius: 10px; font-weight: bold; height: 50px; }
+.btn-json { background: #3498db; color: white; border: none; border-radius: 10px; width: 55px; height: 50px; font-size: 22px; }
+.btn-load { background: #f39c12; }
+.btn-clear { background: #222; color: #555; border: none; border-radius: 10px; padding: 0 10px; font-size: 10px; }
+
+@media (orientation: landscape) {
+    #main-view { height: calc(100% - 130px); }
+    .bottom-sheet { height: 130px; flex-direction: row; }
+    .btn-group { width: 260px; flex-direction: row; height: 100%; align-items: center; }
+    .sticker-source, .x-btn { flex: 0 0 75px; width: 75px; height: 75px; }
+}
