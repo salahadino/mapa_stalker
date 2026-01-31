@@ -1,47 +1,241 @@
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #000; font-family: sans-serif; }
-
-#main-view { width: 100%; height: calc(100% - 210px); position: relative; overflow: hidden; touch-action: none; }
-#map-container { position: absolute; top: 0; left: 0; transform-origin: 0 0; will-change: transform; }
-#background-map { display: block; width: 1000px; height: auto; pointer-events: none; }
-
-/* Pegatinas */
-.sticker-placed { position: absolute; transform: translate(-50%, -50%) rotate(var(--rot)); z-index: 10; touch-action: none; }
-.sticker-placed.active { outline: 3px solid #3498db; filter: drop-shadow(0 0 10px #3498db); z-index: 100; }
-.sticker-placed.locked { filter: sepia(0.4) contrast(1.1); pointer-events: auto; }
-
-/* Panel Superior */
-#edit-panel {
-    position: fixed; top: 0; left: 0; width: 100%; background: rgba(15, 15, 15, 0.95);
-    padding: 10px 15px; border-bottom: 1px solid #333; z-index: 2500; display: none;
-    backdrop-filter: blur(10px); align-items: center; gap: 15px;
+/* --- ESTILOS BASE --- */
+* { 
+    box-sizing: border-box; 
+    -webkit-tap-highlight-color: transparent; 
+    margin: 0; 
+    padding: 0; 
 }
-#edit-panel.visible { display: flex; }
-.edit-control { flex: 1; display: flex; flex-direction: column; }
-.edit-control label { font-size: 10px; color: #888; text-transform: uppercase; }
-input[type="range"] { accent-color: #3498db; }
 
-/* Botones */
-.btn-lock { background: #333; border: none; border-radius: 8px; width: 45px; height: 45px; font-size: 20px; color: white; }
-.btn-lock.is-locked { background: #f1c40f; color: #000; }
-.btn-delete-small { background: #c0392b; color: white; border: none; width: 45px; height: 45px; border-radius: 8px; }
-.btn-close-edit { background: #444; color: white; border: none; padding: 0 15px; height: 45px; border-radius: 8px; font-weight: bold; }
+body, html { 
+    width: 100%; 
+    height: 100%; 
+    overflow: hidden; 
+    background: #0f0f12; 
+    font-family: 'Segoe UI', Roboto, sans-serif; 
+}
 
-/* Barra Inferior */
-.bottom-sheet { position: fixed; bottom: 0; width: 100%; height: 210px; background: #111; border-top: 2px solid #333; z-index: 1500; display: flex; flex-direction: column; }
-.sticker-selector { flex: 1; display: flex; gap: 20px; overflow-x: auto; padding: 15px 20px 30px 20px; }
-.sticker-source, .x-btn { flex: 0 0 95px; width: 95px; height: 95px; background: #222; border-radius: 15px; object-fit: contain; padding: 8px; }
-.x-btn { background: #c0392b; color: white; font-size: 40px; display: flex; align-items: center; justify-content: center; border: 3px solid #e74c3c; }
+/* --- ÁREA DEL MAPA --- */
+#main-view { 
+    width: 100%; 
+    height: calc(100% - 210px); 
+    position: relative; 
+    overflow: hidden; 
+    touch-action: none; 
+}
 
-.btn-group { display: flex; gap: 10px; padding: 0 15px 15px 15px; }
-.btn-export { background: #27ae60; color: white; flex: 2; border: none; border-radius: 10px; font-weight: bold; height: 50px; }
-.btn-json { background: #3498db; color: white; border: none; border-radius: 10px; width: 55px; height: 50px; font-size: 22px; }
-.btn-load { background: #f39c12; }
-.btn-clear { background: #222; color: #555; border: none; border-radius: 10px; padding: 0 10px; font-size: 10px; }
+#map-container { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    transform-origin: 0 0; 
+    will-change: transform; 
+}
+
+#background-map { 
+    display: block; 
+    width: 1000px; 
+    height: auto; 
+    pointer-events: none; 
+}
+
+/* --- PANEL DE EDICIÓN (CORREGIDO) --- */
+#edit-panel {
+    position: fixed; 
+    top: 15px; 
+    left: 50%; 
+    transform: translateX(-50%);
+    width: 95%; 
+    max-width: 600px; 
+    background: rgba(25, 25, 30, 0.9);
+    padding: 15px; 
+    border-radius: 20px; 
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    z-index: 2500; 
+    backdrop-filter: blur(15px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    
+    /* Layout Flexible */
+    display: none; /* Se activa con .visible en JS */
+    align-items: center; 
+    justify-content: center;
+    gap: 12px; 
+    flex-wrap: nowrap;
+}
+
+#edit-panel.visible { 
+    display: flex; 
+}
+
+.edit-control { 
+    flex: 1; 
+    min-width: 70px; 
+    display: flex; 
+    flex-direction: column; 
+}
+
+.edit-control label { 
+    font-size: 10px; 
+    color: #3498db; 
+    text-transform: uppercase; 
+    font-weight: bold;
+    margin-bottom: 4px; 
+    white-space: nowrap; 
+}
+
+input[type="range"] { 
+    width: 100%; 
+    accent-color: #3498db;
+    cursor: pointer;
+}
+
+/* Botones del Panel */
+.btn-lock, .btn-delete-small, .btn-close-edit {
+    flex-shrink: 0;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-lock { background: #333; width: 42px; height: 42px; font-size: 18px; transition: 0.3s; }
+.btn-lock.is-locked { background: #e67e22; color: white; }
+
+.btn-delete-small { background: #c0392b; color: white; width: 42px; height: 42px; font-size: 16px; }
+
+.btn-close-edit { background: #3498db; color: white; padding: 0 15px; height: 42px; font-size: 14px; }
+
+/* --- PEGATINAS Y ANIMACIONES --- */
+@keyframes dropIn {
+    0% { opacity: 0; transform: translate(-50%, -100%) scale(2) rotate(var(--rot)); }
+    100% { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(var(--rot)); }
+}
+
+.sticker-placed { 
+    position: absolute; 
+    transform: translate(-50%, -50%) rotate(var(--rot)); 
+    z-index: 10; 
+    touch-action: none; 
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+    animation: dropIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes activePulse {
+    0% { filter: drop-shadow(0 0 5px #3498db); transform: translate(-50%, -50%) scale(1) rotate(var(--rot)); }
+    50% { filter: drop-shadow(0 0 15px #3498db); transform: translate(-50%, -50%) scale(1.05) rotate(var(--rot)); }
+    100% { filter: drop-shadow(0 0 5px #3498db); transform: translate(-50%, -50%) scale(1) rotate(var(--rot)); }
+}
+
+.sticker-placed.active { 
+    animation: activePulse 1.5s infinite ease-in-out;
+    z-index: 100; 
+}
+
+.sticker-placed.locked { filter: grayscale(0.2) opacity(0.85); }
+
+/* --- BARRA INFERIOR --- */
+.bottom-sheet { 
+    position: fixed; 
+    bottom: 0; 
+    width: 100%; 
+    height: 210px; 
+    background: rgba(20, 20, 25, 0.98); 
+    border-top: 1px solid rgba(255,255,255,0.1); 
+    z-index: 1500; 
+    display: flex; 
+    flex-direction: column; 
+    backdrop-filter: blur(15px);
+    border-radius: 25px 25px 0 0;
+}
+
+.sticker-selector { 
+    flex: 1; 
+    display: flex; 
+    gap: 15px; 
+    overflow-x: auto; 
+    padding: 20px; 
+    scrollbar-width: none; /* Ocultar scroll en Firefox */
+}
+.sticker-selector::-webkit-scrollbar { display: none; } /* Ocultar scroll en Chrome/Safari */
+
+.sticker-source, .x-btn { 
+    flex: 0 0 90px; width: 90px; height: 90px; 
+    background: rgba(255,255,255,0.05); 
+    border-radius: 18px; 
+    object-fit: contain; 
+    padding: 10px; 
+    transition: 0.2s;
+    cursor: pointer;
+}
+.sticker-source:active { transform: scale(0.9); background: rgba(255,255,255,0.1); }
+
+.x-btn { 
+    background: #c0392b; 
+    color: white; 
+    font-size: 35px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+}
+
+/* --- GRUPO DE BOTONES INFERIORES --- */
+.btn-group { 
+    display: flex; 
+    gap: 12px; 
+    padding: 0 20px 20px 20px; 
+    align-items: center;
+}
+
+.btn-export { 
+    background: linear-gradient(135deg, #27ae60, #2ecc71); 
+    color: white; 
+    flex: 1; 
+    border: none; 
+    border-radius: 15px; 
+    font-weight: bold; 
+    height: 55px; 
+    box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-json { 
+    background: #333; 
+    color: white; 
+    border: none; 
+    border-radius: 15px; 
+    width: 55px; 
+    height: 55px; 
+    font-size: 22px; 
+    cursor: pointer;
+}
+
+.btn-clear { 
+    background: transparent; 
+    color: #555; 
+    border: none; 
+    font-size: 11px; 
+    text-decoration: underline; 
+    cursor: pointer;
+    padding: 0 5px;
+}
+
+/* --- RESPONSIVE / LANDSCAPE --- */
+@media (max-width: 500px) {
+    #edit-panel.visible {
+        flex-wrap: wrap; /* En móviles muy estrechos, los botones bajan de línea */
+        justify-content: space-between;
+    }
+    .edit-control { min-width: 40%; } /* Los sliders ocupan la fila superior */
+}
 
 @media (orientation: landscape) {
     #main-view { height: calc(100% - 130px); }
-    .bottom-sheet { height: 130px; flex-direction: row; }
-    .btn-group { width: 260px; flex-direction: row; height: 100%; align-items: center; }
+    .bottom-sheet { height: 130px; flex-direction: row; border-radius: 0; }
+    .sticker-selector { padding: 10px 20px; }
+    .btn-group { width: 300px; padding: 10px; }
     .sticker-source, .x-btn { flex: 0 0 75px; width: 75px; height: 75px; }
 }
